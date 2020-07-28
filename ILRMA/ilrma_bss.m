@@ -30,25 +30,28 @@
 % http://d-kitamura.net/en/demo_rank1_en.htm                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function x_demixed=ilrma_bss(x_mixed, iterations)
+function [x_demixed, W] = ilrma_bss(x_mixed, it, fftSize, nBases, W)
 
 % Set parameters
 seed = 1; % pseudo random seed
 refMic = 1; % reference microphone for back projection
-fsResample = 16000; % resampling frequency [Hz]
-ns = 2; % number of sources
-fftSize = 4096; % window length in STFT [points]
-shiftSize = 2048; % shift length in STFT [points]
-nb = 10; % number of bases (for type=1, nb is # of bases for "each" source. for type=2, nb is # of bases for "all" sources)
-it = 100; % number of iterations (define by checking convergence behavior with drawConv=true)
+ns = size(x_mixed, 2); % number of sources
+% fftSize = 4096; % window length in STFT [points]
+shiftSize = fftSize / 2; % 2048; % shift length in STFT [points]
+% nb = 10; % number of bases (for type=1, nb is # of bases for "each" source. for type=2, nb is # of bases for "all" sources)
+% it = 100; % number of iterations (define by checking convergence behavior with drawConv=true)
 type = 1; % 1 or 2 (1: ILRMA w/o partitioning function, 2: ILRMA with partitioning function)
-drawConv = true; % true or false (true: plot cost function values in each iteration and show convergence behavior, false: faster and do not plot cost function values)
-normalize = true; % true or false (true: apply normalization in each iteration of ILRMA to improve numerical stability, but the monotonic decrease of the cost function may be lost. false: do not apply normalization)
+drawConv = false; % true or false (true: plot cost function values in each iteration and show convergence behavior, false: faster and do not plot cost function values)
+normalize = false; % true or false (true: apply normalization in each iteration of ILRMA to improve numerical stability, but the monotonic decrease of the cost function may be lost. false: do not apply normalization)
 
 % Fix random seed
 RandStream.setGlobalStream(RandStream('mt19937ar','Seed',seed))
 
 % Blind source separation based on ILRMA
-[x_demixed, cost] = bss_ILRMA(x_mixed,ns,nb,fftSize,shiftSize,it,type,refMic,drawConv,normalize);
+if exist('W','var')
+    [x_demixed, cost, W] = bss_ILRMA(x_mixed,ns,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize,W);
+else
+    [x_demixed, cost, W] = bss_ILRMA(x_mixed,ns,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize);
+end
 
 end

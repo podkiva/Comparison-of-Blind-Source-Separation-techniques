@@ -51,7 +51,7 @@ addpath('convolutive_datasets')
 %% RT60 = 0.05s and distance from sound sources to mics = 1m
 %fname = 'stationary_ss_rt60-0.05_TIMIT_dist-1.0m.mat';
 %% RT60 = 0.05s and distance from sound sources to mics = 2.5m
-fname = 'stationary_ss_rt60-0.05_TIMIT_dist-2.5m.mat';
+%fname = 'stationary_ss_rt60-0.05_TIMIT_dist-2.5m.mat';
 %% RT60 = 0.1s and distance from sound sources to mics = 1m
 %fname = 'stationary_ss_rt60-0.1_TIMIT_dist-1.0m.mat';
 %% RT60 = 0.1s and distance from sound sources to mics = 2.5m
@@ -60,6 +60,8 @@ fname = 'stationary_ss_rt60-0.05_TIMIT_dist-2.5m.mat';
 %fname = 'stationary_ss_rt60-0.2_TIMIT_dist-1.0m.mat';
 %% RT60 = 0.2s and distance from sound sources to mics = 2.5m
 %fname = 'stationary_ss_rt60-0.2_TIMIT_dist-2.5m.mat';
+%% RT60 = 0.9s
+fname = 'stationary_ss_rt60-0.9_PYROOM.mat';
 
 loadedData = load(fname);
 % Load mixed audio
@@ -109,11 +111,11 @@ disp(SDR);
 disp('AIRES BSS SIR measure Original VS Unmixed, [dB]');
 disp(SIR);
 
-audiowrite('resulting_wav/aires_stationary_ss_unmixed_channel_1.wav',aires_x_demixed(:,1), fs_);
-audiowrite('resulting_wav/aires_stationary_ss_unmixed_channel_2.wav',aires_x_demixed(:,2), fs_);
-
-audiowrite('resulting_wav/stationary_ss_mixed_channel_1.wav',x_mixed(:,1), fs_);
-audiowrite('resulting_wav/stationary_ss_mixed_channel_2.wav',x_mixed(:,2), fs_);
+% audiowrite('resulting_wav/aires_stationary_ss_unmixed_channel_1.wav',aires_x_demixed(:,1), fs_);
+% audiowrite('resulting_wav/aires_stationary_ss_unmixed_channel_2.wav',aires_x_demixed(:,2), fs_);
+% 
+% audiowrite('resulting_wav/stationary_ss_mixed_channel_1.wav',x_mixed(:,1), fs_);
+% audiowrite('resulting_wav/stationary_ss_mixed_channel_2.wav',x_mixed(:,2), fs_);
 
 % Play AIRES separated sound sources
 disp('Play AIRES separated sound sources');
@@ -139,17 +141,18 @@ disp('TRINICON BSS SIR measure Original VS Unmixed, [dB]');
 disp(SIR);
 
 % Play separated sound sources
-%soundsc(trinicon_x_demixed(:,1), fs_);
-%pause(5);
-%soundsc(trinicon_x_demixed(:,2), fs_);
-%pause(5);
+disp('Play TRINICON separated sound sources');
+soundsc(trinicon_x_demixed(:,1), fs_);
+pause(5);
+soundsc(trinicon_x_demixed(:,2), fs_);
+pause(5);
 
 %% Apply AuxIVA BSS
 disp("****************");
 disp("AuxIVA BSS");
 addpath('AuxIVA')
 startTrinc = tic;
-epochs=30;
+epochs=100;
 auxiva_x_demixed = auxiva_bss(x_mixed, epochs);
 runtimeAlg = toc(startTrinc);
 fprintf('\tRuntime: %5.3f s\n', runtimeAlg);
@@ -162,18 +165,19 @@ disp('AuxIVA BSS SIR measure Original VS Unmixed, [dB]');
 disp(SIR);
 
 % Play separated sound sources
-%soundsc(auxiva_x_demixed(:,1), fs_);
-%pause(5);
-%soundsc(auxiva_x_demixed(:,2), fs_);
-%pause(5);
+disp('Play AuxIVA separated sound sources');
+soundsc(auxiva_x_demixed(:,1), fs_);
+pause(5);
+soundsc(auxiva_x_demixed(:,2), fs_);
+pause(5);
 
 %% Apply ILRMA BSS
 disp("****************");
 disp("ILRMA BSS");
 addpath('ILRMA')
 startTrinc = tic;
-epochs=30;
-ilrma_x_demixed = ilrma_bss(x_mixed, epochs);
+epochs=100;
+ilrma_x_demixed = ilrma_bss(x_mixed, epochs, 1024);
 runtimeAlg = toc(startTrinc);
 fprintf('\tRuntime: %5.3f s\n', runtimeAlg);
 
@@ -185,10 +189,11 @@ disp('ILRMA BSS SIR measure Original VS Unmixed, [dB]');
 disp(SIR);
 
 % Play separated sound sources
-%soundsc(ilrma_x_demixed(:,1), fs_);
-%pause(5);
-%soundsc(ilrma_x_demixed(:,2), fs_);
-%pause(5);
+disp('Play ILRMA separated sound sources');
+soundsc(ilrma_x_demixed(:,1), fs_);
+pause(5);
+soundsc(ilrma_x_demixed(:,2), fs_);
+pause(5);
 %%
 
 

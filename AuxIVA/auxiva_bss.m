@@ -3,11 +3,9 @@
 % independent vector analysis based on auxiliary function technique." WASPAA 2011.
 % ZitengWANG@201901
 
-function x_demixed=auxiva_bss(x_mixed, epochs)
+function [x_demixed, W]=auxiva_bss(x_mixed, epochs, Nfft, W)
 %disp("Start AuxIVA separation ... ");
-addpath('AuxIVA/STFT')
 
-Nfft = 1024;
 Nshift=Nfft/2;
 
 % fft
@@ -15,8 +13,10 @@ X = stft_multi_2(x_mixed, Nfft);
 [Nframe,Nbin,Nch] = size(X);
 
 %% AuxIVA
-% demixing matrix, Nbin x Nch x Nch 
-W = repmat(eye(Nch),1,1,Nbin); W = permute(complex(W,0), [3,1,2]);
+% demixing matrix, Nbin x Nch x Nch
+if ~exist('W','var')
+    W = repmat(eye(Nch),1,1,Nbin); W = permute(complex(W,0), [3,1,2]);
+end
 I = eye(Nch);
 % Y: Nframe x Nbin x Nch
 Y = squeeze(sum(bsxfun(@times, X, permute(conj(W), [4,1,2,3])) ,3));

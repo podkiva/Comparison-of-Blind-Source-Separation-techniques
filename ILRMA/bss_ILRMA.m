@@ -1,4 +1,4 @@
-function [sep, cost] = bss_ILRMA(mix, ns, nb, fftSize, shiftSize, it, type, refMic, drawConv, normalize)
+function [sep, cost, W] = bss_ILRMA(mix, ns, nb, fftSize, shiftSize, it, type, refMic, drawConv, normalize, W)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Blind source separation using independent low-rank matrix analysis      %
 % (ILRMA)                                                                 %
@@ -58,8 +58,13 @@ function [sep, cost] = bss_ILRMA(mix, ns, nb, fftSize, shiftSize, it, type, refM
 Xwhite = whitening( X, ns ); % decorrelate input multichannel signal by applying principal component analysis
 
 % ILRMA
-[Y, cost] = ILRMA( Xwhite, type, it, nb, drawConv, normalize );
-% [Y, cost] = ILRMA_readable( Xwhite, type, it, nb, drawConv, normalize );
+if exist('W','var')
+    [Y, cost, W] = ILRMA( Xwhite, type, it, nb, drawConv, normalize, W);
+    % [Y, cost] = ILRMA_readable( Xwhite, type, it, nb, drawConv, normalize, W);
+else
+    [Y, cost, W] = ILRMA( Xwhite, type, it, nb, drawConv, normalize);
+    % [Y, cost] = ILRMA_readable( Xwhite, type, it, nb, drawConv, normalize);
+end
 
 % Back projection (fixing scale ambiguity using reference microphone)
 Z = backProjection( Y, X(:,:,refMic) ); % scale-fixed estimated signal

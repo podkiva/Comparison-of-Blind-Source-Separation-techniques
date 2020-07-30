@@ -153,7 +153,7 @@ disp("AuxIVA BSS");
 addpath('AuxIVA')
 startTrinc = tic;
 epochs=100;
-auxiva_x_demixed = auxiva_bss(x_mixed, epochs);
+auxiva_x_demixed = auxiva_bss(x_mixed, epochs, 4096);
 runtimeAlg = toc(startTrinc);
 fprintf('\tRuntime: %5.3f s\n', runtimeAlg);
 

@@ -30,12 +30,12 @@
 % http://d-kitamura.net/en/demo_rank1_en.htm                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [x_demixed, W] = ilrma_bss(x_mixed, it, fftSize, nBases, W)
+function [x_demixed, W] = ilrma_bss(x_mixed, it, fftSize, nBases, nSources, W)
 
 % Set parameters
 seed = 1; % pseudo random seed
 refMic = 1; % reference microphone for back projection
-ns = size(x_mixed, 2); % number of sources
+% ns = size(x_mixed, 2); % number of sources
 % fftSize = 4096; % window length in STFT [points]
 shiftSize = fftSize / 2; % 2048; % shift length in STFT [points]
 % nb = 10; % number of bases (for type=1, nb is # of bases for "each" source. for type=2, nb is # of bases for "all" sources)
@@ -49,9 +49,9 @@ RandStream.setGlobalStream(RandStream('mt19937ar','Seed',seed))
 
 % Blind source separation based on ILRMA
 if exist('W','var')
-    [x_demixed, cost, W] = bss_ILRMA(x_mixed,ns,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize,W);
+    [x_demixed, cost, W] = bss_ILRMA(x_mixed,nSources,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize,W);
 else
-    [x_demixed, cost, W] = bss_ILRMA(x_mixed,ns,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize);
+    [x_demixed, cost, W] = bss_ILRMA(x_mixed,nSources,nBases,fftSize,shiftSize,it,type,refMic,drawConv,normalize);
 end
 
 end

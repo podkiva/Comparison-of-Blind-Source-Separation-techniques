@@ -2,7 +2,7 @@
 
 This sample software applies Blind Source Separation (BSS) algorithms to simulated convolutive mixtures in order to compare separation performance.
 
-1 - Offline BSS comparison
+## 1 - Offline BSS comparison
 * The main file to run comparison:
 "main_offline_bss_separation.m": AIRES vs TRINICON vs ILRMA vs AuxIVA
 
@@ -27,11 +27,9 @@ IEEE International Conference on Acoustics,  Speech,  and  Signal  Processing,  
 [5] - Ono, Nobutaka. "Stable and fast update rules for independent vector analysis based on auxiliary function technique." WASPAA 2011.
 
 
-2 - Online BSS comparison
+## 2 - Online BSS comparison
 * The main file to run comparison:
 "main_online_bss_separation.m": AIRES vs TRINICON
-
-* Convolutive mixtures are too big. Please download the samples here https://drive.google.com/open?id=1NrkBwqkX3oZdTdNIPzpg9jV9wfqwnnmW and move them into "convolutive_datasets" folder. 
 
 The main executable file separates convolutive mixture using our proposed Time Domain Stereo Audio Source Separation technique (AIRES)[1], online time domain TRINICON[2]. For evaluation the Signal-to-Distortion Ratio, Signal-to-Interference Ratio and mean computation time per signal block are printed.
 
@@ -48,4 +46,4 @@ scheme  and  its  application  to  reverberant  and  noisy acoustic environments
 
 
 
-Oleg Golokolenko, oleg.golokolenko@tu-ilmenau.de, October 2019.
+Oleg Golokolenko, oleg.golokolenko@tu-ilmenau.de, August 2020.
